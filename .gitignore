@@ -1,0 +1,6 @@
+/.idea/
+.DS_Store
+Thumbs.db
+/tests/examples/
+/vendor/
+/composer.lock
