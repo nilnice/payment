@@ -5,17 +5,20 @@ namespace Nilnice\Payment\Alipay;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
+use Nilnice\Payment\Alipay\Traits\AlipayTrait;
 use Nilnice\Payment\Constant;
 
-class AppPayment extends AbstractAlipay
+class WapPayment extends AbstractAlipay
 {
+    use AlipayTrait;
+
     /**
      * @var \Illuminate\Config\Repository
      */
     protected $config;
 
     /**
-     * AppPayment constructor.
+     * WapPayment constructor.
      *
      * @param \Illuminate\Config\Repository $config
      */
@@ -25,25 +28,26 @@ class AppPayment extends AbstractAlipay
     }
 
     /**
-     * App terminal to pay.
+     * Wap terminal to pay.
      *
      * @param string $gateway
      * @param array  $payload
      *
-     * @return \GuzzleHttp\Psr7\Response|mixed
-     * @throws \Nilnice\Payment\Exception\InvalidKeyException
+     * @return \GuzzleHttp\Psr7\Response
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException|\InvalidArgumentException
      */
-    public function toPay(string $gateway, array $payload)
+    public function toPay(string $gateway, array $payload) : Response
     {
         $key = $this->config->get('private_key');
         $content = array_merge(
             Arr::get($payload, 'biz_content'),
-            Constant::ALI_PAY_APP_PRO_CODE
+            Constant::ALI_PAY_WAP_PRO_CODE
         );
-        $payload['method'] = Constant::ALI_PAY_APP_PAY;
+        $this->check($content);
+        $payload['method'] = Constant::ALI_PAY_WAP_PAY;
         $payload['biz_content'] = json_encode($content);
         $payload['sign'] = self::generateSign($payload, $key);
-        $body = http_build_query($payload);
+        $body = $this->buildRequestForm($gateway, $payload);
 
         return new Response(200, [], $body);
     }

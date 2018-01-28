@@ -5,10 +5,13 @@ namespace Nilnice\Payment\Alipay;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
+use Nilnice\Payment\Alipay\Traits\AlipayTrait;
 use Nilnice\Payment\Constant;
 
 class WebPayment extends AbstractAlipay
 {
+    use AlipayTrait;
+
     /**
      * @var \Illuminate\Config\Repository
      */
@@ -25,73 +28,27 @@ class WebPayment extends AbstractAlipay
     }
 
     /**
-     * To pay.
+     * Web terminal to pay.
      *
      * @param string $gateway
      * @param array  $payload
      *
-     * @return string
-     * @throws \Nilnice\Payment\Exception\InvalidConfigException|\InvalidArgumentException
+     * @return \GuzzleHttp\Psr7\Response
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException|\InvalidArgumentException
      */
-    public function toPay(string $gateway, array $payload)
+    public function toPay(string $gateway, array $payload) : Response
     {
         $key = $this->config->get('private_key');
         $content = array_merge(
             Arr::get($payload, 'biz_content'),
-            Constant::ALI_PAY_PRO_CODE
+            Constant::ALI_PAY_WEB_PRO_CODE
         );
         $this->check($content);
         $payload['method'] = Constant::ALI_PAY_WEB_PAY;
         $payload['biz_content'] = json_encode($content);
         $payload['sign'] = self::generateSign($payload, $key);
-
         $body = $this->buildRequestForm($gateway, $payload);
 
         return new Response(200, [], $body);
-    }
-
-    /**
-     * Build request form.
-     *
-     * @param string $gateway
-     * @param array  $payload
-     *
-     * @return string
-     */
-    public function buildRequestForm(string $gateway, array $payload) : string
-    {
-        $format
-            = <<<HTML
-<form id="alipaysubmit" name="alipaysubmit" action="%s" method="post">
-    %s
-    <input type="submit" value="ok" style="display: none">
-    <script>document.forms['alipaysubmit'].submit()</script>
-</form>
-HTML;
-        $input = '';
-        foreach ($payload as $key => $val) {
-            $val = str_replace("'", '&apos;', $val);
-            $input .= "<input type='hidden' name='{$key}' value='{$val}'>";
-        }
-        $html = sprintf($format, $gateway, $input);
-
-        return $html;
-    }
-
-    /**
-     * Check order arguments.
-     *
-     * @param array $order
-     *
-     * @throws \InvalidArgumentException
-     */
-    private function check(array $order)
-    {
-        $required = ['out_trade_no', 'total_amount', 'subject'];
-        foreach ($required as $key => $item) {
-            if (! array_key_exists($item, $order)) {
-                throw new \InvalidArgumentException("The {$item} field is required");
-            }
-        }
     }
 }

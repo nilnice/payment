@@ -5,7 +5,7 @@ namespace Nilnice\Payment\Alipay;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Str;
 use Nilnice\Payment\Constant;
-use Nilnice\Payment\Exception\InvalidConfigException;
+use Nilnice\Payment\Exception\InvalidKeyException;
 use Nilnice\Payment\PaymentInterface;
 
 abstract class AbstractAlipay implements PaymentInterface
@@ -20,12 +20,12 @@ abstract class AbstractAlipay implements PaymentInterface
      * @param null  $key
      *
      * @return string
-     * @throws \Nilnice\Payment\Exception\InvalidConfigException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
      */
     public static function generateSign(array $array, $key = null) : string
     {
         if ($key === null) {
-            throw new InvalidConfigException(
+            throw new InvalidKeyException(
                 'Invalid Alipay [private key] configuration.',
                 Constant::ALI_PAY_PRIVATE_KEY_INVALID
             );
@@ -85,7 +85,7 @@ abstract class AbstractAlipay implements PaymentInterface
      * @param bool        $isSync
      *
      * @return bool
-     * @throws \Nilnice\Payment\Exception\InvalidConfigException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
      */
     public static function verifySign(
         array $array,
@@ -93,7 +93,7 @@ abstract class AbstractAlipay implements PaymentInterface
         $isSync = false
     ) : bool {
         if ($key === null) {
-            throw new InvalidConfigException(
+            throw new InvalidKeyException(
                 'Invalid Alipay [public key] configuration.',
                 Constant::ALI_PAY_PUBLIC_KEY_INVALID
             );

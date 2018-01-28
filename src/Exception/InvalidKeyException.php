@@ -5,10 +5,10 @@ namespace Nilnice\Payment\Exception;
 use Exception;
 use Throwable;
 
-class InvalidConfigException extends Exception
+class InvalidKeyException extends Exception
 {
     /**
-     * InvalidConfigException constructor.
+     * InvalidKeyException constructor.
      *
      * @param string          $message
      * @param int             $code

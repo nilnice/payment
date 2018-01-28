@@ -4,5 +4,4 @@ namespace Nilnice\Payment;
 
 interface GatewayInterface
 {
-
 }
