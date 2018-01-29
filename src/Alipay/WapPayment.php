@@ -28,7 +28,7 @@ class WapPayment extends AbstractAlipay
     }
 
     /**
-     * Wap terminal to pay.
+     * Use wap to pay for order.
      *
      * @param string $gateway
      * @param array  $payload

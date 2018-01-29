@@ -37,7 +37,6 @@ abstract class AbstractAlipay implements PaymentInterface
         $result = mb_convert_encoding($result, self::E_UTF8, self::E_GB2312);
         $result = json_decode($result, true);
 
-
         $data = Arr::get($result, $method);
         $sign = Arr::get($result, 'sign');
         if (! self::verifySign($data, $key, true, $sign)) {

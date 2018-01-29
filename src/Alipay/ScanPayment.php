@@ -32,7 +32,7 @@ class ScanPayment extends AbstractAlipay
     }
 
     /**
-     * Scan terminal to pay.
+     * Use scan code to pay for order.
      *
      * @param string $gateway
      * @param array  $payload
@@ -57,46 +57,5 @@ class ScanPayment extends AbstractAlipay
         $payload['sign'] = self::generateSign($payload, $key);
 
         return $this->send($payload, $this->config->get('public_key'));
-    }
-
-    /**
-     * Send a request.
-     *
-     * @param array  $array
-     * @param string $key
-     *
-     * @return \Illuminate\Support\Collection
-     * @throws \RuntimeException
-     * @throws \Nilnice\Payment\Exception\GatewayException
-     * @throws \Nilnice\Payment\Exception\InvalidKeyException
-     * @throws \Nilnice\Payment\Exception\InvalidSignException
-     * @throws \RuntimeException
-     */
-    public function sendRequest(array $array, string $key) : Collection
-    {
-        $method = Arr::get($array, 'method');
-        $method = str_replace('.', '_', $method) . '_response';
-        $result = $this->post('', $array);
-        $result = mb_convert_encoding($result, self::E_UTF8, self::E_GB2312);
-        $result = json_decode($result, true);
-
-
-        $data = Arr::get($result, $method);
-        $sign = Arr::get($result, 'sign');
-        if (! self::verifySign($data, $key, true, $sign)) {
-            throw new InvalidSignException(
-                'Invalid Alipay [signature] verify.',
-                3
-            );
-        }
-
-        if ('10000' === $code = Arr::get($result, "{$method}.code")) {
-            return new Collection($data);
-        }
-
-        throw new GatewayException(
-            "Gateway Alipay [{$data['msg']}] error.",
-            $code
-        );
     }
 }

@@ -45,6 +45,12 @@ final class Constant
     public const ALI_PAY_SCAN_PAY = 'alipay.trade.precreate'; // 统一收单线下交易预创建（扫码支付）
 
     /**
+     * 支付宝 Bar 支付相关 API 列表
+     */
+    public const ALI_PAY_BAR_PRO_CODE = ['product_code' => 'FACE_TO_FACE_PAYMENT'];
+    public const ALI_PAY_BAR_PAY = 'alipay.trade.pay'; // 统一收单交易支付接口（条码支付）
+
+    /**
      * 异常代码
      */
     public const ALI_PAY_PUBLIC_KEY_INVALID = 1001;

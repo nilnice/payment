@@ -25,7 +25,7 @@ class AppPayment extends AbstractAlipay
     }
 
     /**
-     * App terminal to pay.
+     * Use app to pay for order.
      *
      * @param string $gateway
      * @param array  $payload
