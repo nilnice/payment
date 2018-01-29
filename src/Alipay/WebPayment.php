@@ -5,12 +5,12 @@ namespace Nilnice\Payment\Alipay;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
-use Nilnice\Payment\Alipay\Traits\AlipayTrait;
+use Nilnice\Payment\Alipay\Traits\WebTrait;
 use Nilnice\Payment\Constant;
 
 class WebPayment extends AbstractAlipay
 {
-    use AlipayTrait;
+    use WebTrait;
 
     /**
      * @var \Illuminate\Config\Repository

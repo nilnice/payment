@@ -2,7 +2,7 @@
 
 namespace Nilnice\Payment\Alipay\Traits;
 
-trait AlipayTrait
+trait WebTrait
 {
     /**
      * Build request form.

@@ -3,15 +3,59 @@
 namespace Nilnice\Payment\Alipay;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Nilnice\Payment\Alipay\Traits\RequestTrait;
 use Nilnice\Payment\Constant;
+use Nilnice\Payment\Exception\GatewayException;
 use Nilnice\Payment\Exception\InvalidKeyException;
+use Nilnice\Payment\Exception\InvalidSignException;
 use Nilnice\Payment\PaymentInterface;
 
 abstract class AbstractAlipay implements PaymentInterface
 {
+    use RequestTrait;
+
     public const E_GB2312 = 'GB2312';
     public const E_UTF8 = 'UTF-8';
+
+    /**
+     * @param array  $array
+     * @param string $key
+     *
+     * @return \Illuminate\Support\Collection
+     * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
+     * @throws \Nilnice\Payment\Exception\InvalidSignException
+     * @throws \RuntimeException
+     */
+    public function send(array $array, string $key) : Collection
+    {
+        $method = Arr::get($array, 'method');
+        $method = str_replace('.', '_', $method) . '_response';
+        $result = $this->post('', $array);
+        $result = mb_convert_encoding($result, self::E_UTF8, self::E_GB2312);
+        $result = json_decode($result, true);
+
+
+        $data = Arr::get($result, $method);
+        $sign = Arr::get($result, 'sign');
+        if (! self::verifySign($data, $key, true, $sign)) {
+            throw new InvalidSignException(
+                'Invalid Alipay [signature] verify.',
+                3
+            );
+        }
+
+        if ('10000' === $code = Arr::get($result, "{$method}.code")) {
+            return new Collection($data);
+        }
+
+        throw new GatewayException(
+            "Gateway Alipay [{$data['msg']}] error.",
+            $code
+        );
+    }
 
     /**
      * Generate signature.
@@ -83,6 +127,7 @@ abstract class AbstractAlipay implements PaymentInterface
      * @param array       $array
      * @param string|null $key
      * @param bool        $isSync
+     * @param string|null $sign
      *
      * @return bool
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
@@ -90,7 +135,8 @@ abstract class AbstractAlipay implements PaymentInterface
     public static function verifySign(
         array $array,
         $key = null,
-        $isSync = false
+        $isSync = false,
+        $sign = null
     ) : bool {
         if ($key === null) {
             throw new InvalidKeyException(
@@ -105,7 +151,7 @@ abstract class AbstractAlipay implements PaymentInterface
             $key = self::getKey($key);
         }
 
-        $sign = Arr::get($array, 'sign');
+        $sign = $sign ?? Arr::get($array, 'sign');
         $data = $isSync
             ? mb_convert_encoding(
                 json_encode($array, JSON_UNESCAPED_UNICODE),
@@ -114,8 +160,9 @@ abstract class AbstractAlipay implements PaymentInterface
             )
             : self::getSignContent($array, true);
         $sign = base64_decode($sign);
+        $result = openssl_verify($data, $sign, $key, OPENSSL_ALGO_SHA256) === 1;
 
-        return openssl_verify($data, $sign, $key, OPENSSL_ALGO_SHA256) === 1;
+        return $result === 1;
     }
 
     /**

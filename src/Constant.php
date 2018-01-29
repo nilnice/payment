@@ -39,6 +39,12 @@ final class Constant
     public const ALI_PAY_WAP_PAY = 'alipay.trade.wap.pay'; // 手机网页支付接口
 
     /**
+     * 支付宝 Scan 支付相关 API 列表
+     */
+    public const ALI_PAY_SCAN_PRO_CODE = ['product_code' => ''];
+    public const ALI_PAY_SCAN_PAY = 'alipay.trade.precreate'; // 统一收单线下交易预创建（扫码支付）
+
+    /**
      * 异常代码
      */
     public const ALI_PAY_PUBLIC_KEY_INVALID = 1001;
