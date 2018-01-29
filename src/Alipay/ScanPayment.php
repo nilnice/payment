@@ -3,8 +3,9 @@
 namespace Nilnice\Payment\Alipay;
 
 use Illuminate\Config\Repository;
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
+use Illuminate\Support\{
+    Arr, Collection
+};
 use Nilnice\Payment\Alipay\Traits\WebTrait;
 use Nilnice\Payment\Constant;
 use Nilnice\Payment\Exception\{

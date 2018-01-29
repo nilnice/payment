@@ -2,14 +2,14 @@
 
 namespace Nilnice\Payment\Alipay;
 
-use Illuminate\Support\Arr;
-use Illuminate\Support\Collection;
-use Illuminate\Support\Str;
+use Illuminate\Support\{
+    Arr, Collection, Str
+};
 use Nilnice\Payment\Alipay\Traits\RequestTrait;
 use Nilnice\Payment\Constant;
-use Nilnice\Payment\Exception\GatewayException;
-use Nilnice\Payment\Exception\InvalidKeyException;
-use Nilnice\Payment\Exception\InvalidSignException;
+use Nilnice\Payment\Exception\{
+    GatewayException, InvalidKeyException, InvalidSignException
+};
 use Nilnice\Payment\PaymentInterface;
 
 abstract class AbstractAlipay implements PaymentInterface
