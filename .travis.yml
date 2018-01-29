@@ -1,0 +1,37 @@
+language: php
+dist: trusty
+sudo: required
+group: deprecated-2017Q4
+
+php:
+  - 7.1
+  - 7.2
+
+matrix:
+  fast_finish: true
+
+cache:
+  directories:
+    - vendor
+    - $HOME/.composer/cache
+
+before_install:
+  - export PATH="$HOME/.composer/vendor/bin:$PATH"
+
+install:
+  # install composer dependencies
+  - travis_retry composer self-update
+  - travis_retry composer install --no-interaction --prefer-source
+
+before_script:
+  - mkdir -p build/logs
+
+  # show some versions and env information
+  - php --version
+  - composer --version
+
+script:
+  - php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=build/logs/clover.xml
+
+notifications:
+  email: false
