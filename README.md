@@ -3,6 +3,7 @@
 ***
 
 [![StyleCI](https://styleci.io/repos/119123605/shield?branch=master)](https://styleci.io/repos/119123605)
+[![Travis branch](https://img.shields.io/travis/nilnice/payment/master.svg?style=flat-square)](https://github.com/nilnice/payment)
 
 💥 让支付宝，微信支付更加容易的集成到业务中
 
