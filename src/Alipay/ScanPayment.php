@@ -3,18 +3,13 @@
 namespace Nilnice\Payment\Alipay;
 
 use Illuminate\Config\Repository;
-use Illuminate\Support\{
-    Arr, Collection
-};
-use Nilnice\Payment\Alipay\Traits\WebTrait;
+use Illuminate\Support\Arr;
+use Nilnice\Payment\Alipay\Traits\FormTrait;
 use Nilnice\Payment\Constant;
-use Nilnice\Payment\Exception\{
-    GatewayException, InvalidSignException
-};
 
 class ScanPayment extends AbstractAlipay
 {
-    use WebTrait;
+    use FormTrait;
 
     /**
      * @var \Illuminate\Config\Repository
@@ -51,7 +46,7 @@ class ScanPayment extends AbstractAlipay
             Arr::get($payload, 'biz_content'),
             Constant::ALI_PAY_SCAN_PRO_CODE
         );
-        $this->check($content);
+        self::check($content);
         $payload['method'] = Constant::ALI_PAY_SCAN_PAY;
         $payload['biz_content'] = json_encode($content);
         $payload['sign'] = self::generateSign($payload, $key);

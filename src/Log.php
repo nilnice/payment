@@ -8,6 +8,9 @@ use Monolog\Logger;
 use Psr\Log\LoggerInterface;
 
 /**
+ * @method static Logger getLevels()
+ * @method static Logger getLevelName($level)
+ * @method static Logger toMonologLevel($level)
  * @method static Logger log($level, $message, array $context = [])
  * @method static Logger debug($message, array $context = [])
  * @method static Logger info($message, array $context = [])

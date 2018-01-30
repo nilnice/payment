@@ -1,7 +1,7 @@
 /.idea/
 .DS_Store
 Thumbs.db
-/build/
+/docs/
 /tests/examples/
 /vendor/
 /composer.lock

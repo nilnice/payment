@@ -2,14 +2,14 @@
 
 namespace Nilnice\Payment\Alipay;
 
-use Illuminate\Support\{
-    Arr, Collection, Str
-};
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Str;
 use Nilnice\Payment\Alipay\Traits\RequestTrait;
 use Nilnice\Payment\Constant;
-use Nilnice\Payment\Exception\{
-    GatewayException, InvalidKeyException, InvalidSignException
-};
+use Nilnice\Payment\Exception\GatewayException;
+use Nilnice\Payment\Exception\InvalidKeyException;
+use Nilnice\Payment\Exception\InvalidSignException;
 use Nilnice\Payment\PaymentInterface;
 
 abstract class AbstractAlipay implements PaymentInterface
@@ -208,5 +208,23 @@ abstract class AbstractAlipay implements PaymentInterface
         $string = sprintf($format, $char, $key, $char);
 
         return $string;
+    }
+
+    /**
+     * Check order arguments.
+     *
+     * @param array $order
+     *
+     * @return void
+     * @throws \InvalidArgumentException
+     */
+    public static function check(array $order) : void
+    {
+        $required = ['out_trade_no', 'total_amount', 'subject'];
+        foreach ($required as $key => $item) {
+            if (! array_key_exists($item, $order)) {
+                throw new \InvalidArgumentException("The {$item} field is required");
+            }
+        }
     }
 }

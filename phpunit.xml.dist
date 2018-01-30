@@ -11,11 +11,6 @@
          stopOnFailure="false"
          syntaxCheck="false"
 >
-    <php>
-        <ini name="error_reporting" value="-1"/>
-        <ini name="memory_limit" value="-1"/>
-    </php>
-
     <testsuites>
         <testsuite name="Nilnice Payment Test Suite">
             <directory suffix="Test.php">./tests/</directory>
@@ -26,10 +21,13 @@
         <whitelist processUncoveredFilesFromWhitelist="true"
                    addUncoveredFilesFromWhitelist="true"
         >
-            <directory suffix=".php">./src</directory>
+            <directory suffix=".php">./src/</directory>
+            <exclude>
+                <directory>./vendor/</directory>
+            </exclude>
         </whitelist>
     </filter>
     <logging>
-        <log type="coverage-clover" target="build/logs/clover.xml"/>
+        <log type="coverage-clover" target="./docs/clover.xml"/>
     </logging>
 </phpunit>

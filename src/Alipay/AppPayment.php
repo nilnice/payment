@@ -31,6 +31,7 @@ class AppPayment extends AbstractAlipay
      * @param array  $payload
      *
      * @return \GuzzleHttp\Psr7\Response|mixed
+     * @throws \InvalidArgumentException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      */
     public function toPay(string $gateway, array $payload)
@@ -40,6 +41,7 @@ class AppPayment extends AbstractAlipay
             Arr::get($payload, 'biz_content'),
             Constant::ALI_PAY_APP_PRO_CODE
         );
+        self::check($content);
         $payload['method'] = Constant::ALI_PAY_APP_PAY;
         $payload['biz_content'] = json_encode($content);
         $payload['sign'] = self::generateSign($payload, $key);

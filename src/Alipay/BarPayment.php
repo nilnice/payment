@@ -5,12 +5,12 @@ namespace Nilnice\Payment\Alipay;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Nilnice\Payment\Alipay\Traits\WebTrait;
+use Nilnice\Payment\Alipay\Traits\FormTrait;
 use Nilnice\Payment\Constant;
 
 class BarPayment extends AbstractAlipay
 {
-    use WebTrait;
+    use FormTrait;
 
     /**
      * @var \Illuminate\Config\Repository
@@ -47,7 +47,7 @@ class BarPayment extends AbstractAlipay
             Arr::get($payload, 'biz_content'),
             Constant::ALI_PAY_BAR_PRO_CODE
         );
-        $this->check($content);
+        self::check($content);
         $payload['method'] = Constant::ALI_PAY_BAR_PAY;
         $payload['biz_content'] = json_encode($content);
         $payload['sign'] = self::generateSign($payload, $key);

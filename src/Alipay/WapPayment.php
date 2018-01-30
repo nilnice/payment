@@ -5,12 +5,12 @@ namespace Nilnice\Payment\Alipay;
 use GuzzleHttp\Psr7\Response;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
-use Nilnice\Payment\Alipay\Traits\WebTrait;
+use Nilnice\Payment\Alipay\Traits\FormTrait;
 use Nilnice\Payment\Constant;
 
 class WapPayment extends AbstractAlipay
 {
-    use WebTrait;
+    use FormTrait;
 
     /**
      * @var \Illuminate\Config\Repository
@@ -43,7 +43,7 @@ class WapPayment extends AbstractAlipay
             Arr::get($payload, 'biz_content'),
             Constant::ALI_PAY_WAP_PRO_CODE
         );
-        $this->check($content);
+        self::check($content);
         $payload['method'] = Constant::ALI_PAY_WAP_PAY;
         $payload['biz_content'] = json_encode($content);
         $payload['sign'] = self::generateSign($payload, $key);

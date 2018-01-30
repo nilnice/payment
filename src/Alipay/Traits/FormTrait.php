@@ -2,7 +2,7 @@
 
 namespace Nilnice\Payment\Alipay\Traits;
 
-trait WebTrait
+trait FormTrait
 {
     /**
      * Build request form.
@@ -30,23 +30,5 @@ HTML;
         $html = sprintf($format, $gateway, $input);
 
         return $html;
-    }
-
-    /**
-     * Check order arguments.
-     *
-     * @param array $order
-     *
-     * @return void
-     * @throws \InvalidArgumentException
-     */
-    public function check(array $order) : void
-    {
-        $required = ['out_trade_no', 'total_amount', 'subject'];
-        foreach ($required as $key => $item) {
-            if (! array_key_exists($item, $order)) {
-                throw new \InvalidArgumentException("The {$item} field is required");
-            }
-        }
     }
 }
