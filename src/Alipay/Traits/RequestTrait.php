@@ -3,11 +3,54 @@
 namespace Nilnice\Payment\Alipay\Traits;
 
 use GuzzleHttp\Client;
+use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Nilnice\Payment\Constant;
+use Nilnice\Payment\Exception\GatewayException;
+use Nilnice\Payment\Exception\InvalidSignException;
 use Psr\Http\Message\ResponseInterface;
 
 trait RequestTrait
 {
+    /**
+     * Send a Alipay interface request.
+     *
+     * @param array  $array
+     * @param string $key
+     *
+     * @return \Illuminate\Support\Collection
+     * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
+     * @throws \Nilnice\Payment\Exception\InvalidSignException
+     * @throws \RuntimeException
+     */
+    public function send(array $array, string $key) : Collection
+    {
+        $method = Arr::get($array, 'method');
+        $method = str_replace('.', '_', $method) . '_response';
+        $result = $this->post('', $array);
+        $result = mb_convert_encoding($result, 'UTF-8', 'GB2312');
+        $result = json_decode($result, true);
+
+        $data = Arr::get($result, $method);
+        $sign = Arr::get($result, 'sign');
+        if (! self::verifySign($data, $key, true, $sign)) {
+            throw new InvalidSignException(
+                'Invalid Alipay [signature] verify.',
+                3
+            );
+        }
+
+        if ('10000' === $code = Arr::get($result, "{$method}.code")) {
+            return new Collection($data);
+        }
+
+        throw new GatewayException(
+            "Gateway Alipay [{$data['msg']}] error.",
+            $code
+        );
+    }
+
     /**
      * Send a post request.
      *

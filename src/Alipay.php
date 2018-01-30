@@ -3,11 +3,17 @@
 namespace Nilnice\Payment;
 
 use Illuminate\Contracts\Config\Repository;
+use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Nilnice\Payment\Alipay\Traits\RequestTrait;
+use Nilnice\Payment\Alipay\Traits\SecurityTrait;
 use Nilnice\Payment\Exception\GatewayException;
 
 class Alipay implements GatewayInterface
 {
+    use RequestTrait;
+    use SecurityTrait;
+
     /**
      * @var \Illuminate\Contracts\Config\Repository
      */
@@ -82,7 +88,7 @@ class Alipay implements GatewayInterface
     }
 
     /**
-     * Pay.
+     * Pay dispatcher.
      *
      * @param string $gateway
      * @param array  $array
@@ -100,6 +106,28 @@ class Alipay implements GatewayInterface
         }
 
         throw new GatewayException("Pay gateway [{$gateway}] not exists.", 1);
+    }
+
+    /**
+     * Query an order information.
+     *
+     * @param array|string $order
+     *
+     * @return \Illuminate\Support\Collection
+     * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
+     * @throws \Nilnice\Payment\Exception\InvalidSignException
+     * @throws \RuntimeException
+     */
+    public function query($order) : Collection
+    {
+        $key = $this->config->get('private_key');
+        $order = \is_array($order) ? $order : ['out_trade_no' => $order];
+        $this->payload['method'] = Constant::ALI_PAY_QUERY;
+        $this->payload['biz_content'] = json_encode($order);
+        $this->payload['sign'] = self::generateSign($this->payload, $key);
+
+        return $this->send($this->payload, $this->config->get('public_key'));
     }
 
     /**

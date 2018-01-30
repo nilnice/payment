@@ -2,6 +2,6 @@
 
 namespace Nilnice\Payment;
 
-class Wechat implements GatewayInterface
+class Wechat
 {
 }

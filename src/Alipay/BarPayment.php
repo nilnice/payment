@@ -5,13 +5,10 @@ namespace Nilnice\Payment\Alipay;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
-use Nilnice\Payment\Alipay\Traits\FormTrait;
 use Nilnice\Payment\Constant;
 
 class BarPayment extends AbstractAlipay
 {
-    use FormTrait;
-
     /**
      * @var \Illuminate\Config\Repository
      */

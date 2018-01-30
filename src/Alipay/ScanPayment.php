@@ -4,13 +4,10 @@ namespace Nilnice\Payment\Alipay;
 
 use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
-use Nilnice\Payment\Alipay\Traits\FormTrait;
 use Nilnice\Payment\Constant;
 
 class ScanPayment extends AbstractAlipay
 {
-    use FormTrait;
-
     /**
      * @var \Illuminate\Config\Repository
      */
