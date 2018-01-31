@@ -1,9 +1,10 @@
 {
   "name": "nilnice/payment",
-  "description": "支付宝支付扩展包",
+  "description": "支付宝微信支付扩展包",
   "keywords": [
     "alipay",
     "wechat",
+    "payment",
     "pay"
   ],
   "require": {
@@ -18,7 +19,7 @@
   "authors": [
     {
       "name": "nilnice",
-      "email": "imajinyun@163.com"
+      "email": "nilnice@126.com"
     }
   ],
   "autoload": {
