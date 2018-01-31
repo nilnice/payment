@@ -12,8 +12,8 @@ trait SecurityTrait
     /**
      * Generate signature.
      *
-     * @param array $array
-     * @param null  $key
+     * @param array       $array
+     * @param string|null $key
      *
      * @return string
      * @throws \Nilnice\Payment\Exception\InvalidKeyException

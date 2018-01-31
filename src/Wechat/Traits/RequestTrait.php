@@ -117,7 +117,7 @@ trait RequestTrait
      */
     public static function toXml(array $array) : string
     {
-        if (! $array) {
+        if (empty($array)) {
             throw new \InvalidArgumentException('Invalid [array] argument.', 2);
         }
 
