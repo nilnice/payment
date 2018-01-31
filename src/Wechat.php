@@ -74,29 +74,17 @@ class Wechat implements GatewayInterface
         return $this->dispatcher($method, ...$arguments);
     }
 
+
     /**
-     * Pay dispatcher.
+     * Query an order information.
      *
-     * @param string $gateway
-     * @param array  $array
+     * @param array|string $order
      *
-     * @return mixed
-     * @throws \Nilnice\Payment\Exception\GatewayException
+     * @return \Illuminate\Support\Collection
      */
-    private function dispatcher(string $gateway, array $array = [])
-    {
-        $this->payload = array_merge($this->payload, $array);
-        $class = \get_class($this) . '\\' . Str::studly($gateway) . 'Payment';
-
-        if (class_exists($class)) {
-            return $this->toPay($class);
-        }
-
-        throw new GatewayException("Pay gateway [{$gateway}] not exists", 1);
-    }
-
     public function query($order) : Collection
     {
+        return new Collection([]);
     }
 
     /**
@@ -119,6 +107,27 @@ class Wechat implements GatewayInterface
             "Pay gateway [{$gateway}] must be an instance of the GatewayInterface.",
             2
         );
+    }
+
+    /**
+     * Pay dispatcher.
+     *
+     * @param string $gateway
+     * @param array  $array
+     *
+     * @return mixed
+     * @throws \Nilnice\Payment\Exception\GatewayException
+     */
+    private function dispatcher(string $gateway, array $array = [])
+    {
+        $this->payload = array_merge($this->payload, $array);
+        $class = \get_class($this) . '\\' . Str::studly($gateway) . 'Payment';
+
+        if (class_exists($class)) {
+            return $this->toPay($class);
+        }
+
+        throw new GatewayException("Pay gateway [{$gateway}] not exists", 1);
     }
 
     /**
