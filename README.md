@@ -2,8 +2,8 @@
 
 ***
 
-[![Travis branch](https://img.shields.io/travis/nilnice/payment/master.svg?style=flat-square)](https://github.com/nilnice/payment)
-[![Scrutinizer](https://img.shields.io/scrutinizer/g/nilnice/payment.svg?style=flat-square)](https://github.com/nilnice/payment)
+[![Travis branch](https://img.shields.io/travis/nilnice/payment/master.svg?style=flat-square)](https://travis-ci.org/nilnice/payment)
+[![Scrutinizer](https://img.shields.io/scrutinizer/g/nilnice/payment.svg?style=flat-square)](https://scrutinizer-ci.com/g/nilnice/payment/)
 [![StyleCI](https://styleci.io/repos/119123605/shield?branch=master)](https://styleci.io/repos/119123605)
 
 💥 让支付宝，微信支付更加容易的集成到业务中
