@@ -16,6 +16,11 @@
 
 关于支付扩展包的使用请移步到[支付使用文档](https://github.com/nilnice/payment/wiki)
 
+### 环境
+
+- `PHP 7.1.3+`
+- `Composer`
+
 ### 协议 
 
 开源协议参见[MIT license](https://opensource.org/licenses/MIT)
