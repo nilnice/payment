@@ -2,28 +2,12 @@
 
 namespace Nilnice\Payment\Alipay;
 
-use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Nilnice\Payment\Constant;
 
 class BarPayment extends AbstractAlipay
 {
-    /**
-     * @var \Illuminate\Config\Repository
-     */
-    protected $config;
-
-    /**
-     * BarPayment constructor.
-     *
-     * @param \Illuminate\Config\Repository $config
-     */
-    public function __construct(Repository $config)
-    {
-        $this->config = $config;
-    }
-
     /**
      * Use bar code to pay for order.
      *

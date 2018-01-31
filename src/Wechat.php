@@ -8,6 +8,9 @@ use Illuminate\Support\Str;
 use Nilnice\Payment\Exception\GatewayException;
 use Symfony\Component\HttpFoundation\Request;
 
+/**
+ * @method Wechat\WapPayment wap(array $array)
+ */
 class Wechat implements GatewayInterface
 {
     /**
@@ -28,12 +31,12 @@ class Wechat implements GatewayInterface
     /**
      * Wechat constructor.
      *
-     * @param \Illuminate\Config\Repository $config
+     * @param array $config
      */
-    public function __construct(Repository $config)
+    public function __construct(array $config)
     {
-        $this->config = $config;
-        $env = $config->get('env', 'pro');
+        $this->config = new Repository($config);
+        $env = $this->config->get('env', 'pro');
         $this->gateway = self::getGatewayUrl($env);
         $this->payload = [
             // 公众账号 ID - 微信分配的公众账号 ID
@@ -68,7 +71,7 @@ class Wechat implements GatewayInterface
      */
     public function __call(string $method, array $arguments)
     {
-        return $this->pay($method, ...$arguments);
+        return $this->dispatcher($method, ...$arguments);
     }
 
     /**
@@ -80,7 +83,7 @@ class Wechat implements GatewayInterface
      * @return mixed
      * @throws \Nilnice\Payment\Exception\GatewayException
      */
-    public function pay(string $gateway, array $array = [])
+    private function dispatcher(string $gateway, array $array = [])
     {
         $this->payload = array_merge($this->payload, $array);
         $class = \get_class($this) . '\\' . Str::studly($gateway) . 'Payment';

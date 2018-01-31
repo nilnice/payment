@@ -2,30 +2,14 @@
 
 namespace Nilnice\Payment\Alipay;
 
-use GuzzleHttp\Psr7\Response;
-use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
 use Nilnice\Payment\Alipay\Traits\FormTrait;
 use Nilnice\Payment\Constant;
+use Symfony\Component\HttpFoundation\Response;
 
 class WapPayment extends AbstractAlipay
 {
     use FormTrait;
-
-    /**
-     * @var \Illuminate\Config\Repository
-     */
-    protected $config;
-
-    /**
-     * WapPayment constructor.
-     *
-     * @param \Illuminate\Config\Repository $config
-     */
-    public function __construct(Repository $config)
-    {
-        $this->config = $config;
-    }
 
     /**
      * Use wap to pay for order.
@@ -33,8 +17,9 @@ class WapPayment extends AbstractAlipay
      * @param string $gateway
      * @param array  $payload
      *
-     * @return \GuzzleHttp\Psr7\Response
-     * @throws \Nilnice\Payment\Exception\InvalidKeyException|\InvalidArgumentException
+     * @return \Symfony\Component\HttpFoundation\Response
+     * @throws \InvalidArgumentException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
      */
     public function toPay(string $gateway, array $payload) : Response
     {
@@ -49,6 +34,6 @@ class WapPayment extends AbstractAlipay
         $payload['sign'] = self::generateSign($payload, $key);
         $body = $this->buildRequestForm($gateway, $payload);
 
-        return new Response(200, [], $body);
+        return Response::create($body);
     }
 }

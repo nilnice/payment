@@ -2,6 +2,7 @@
 
 namespace Nilnice\Payment\Alipay;
 
+use Illuminate\Config\Repository;
 use Nilnice\Payment\Alipay\Traits\RequestTrait;
 use Nilnice\Payment\Alipay\Traits\SecurityTrait;
 use Nilnice\Payment\PaymentInterface;
@@ -10,6 +11,21 @@ abstract class AbstractAlipay implements PaymentInterface
 {
     use SecurityTrait;
     use RequestTrait;
+
+    /**
+     * @var \Illuminate\Config\Repository
+     */
+    protected $config;
+
+    /**
+     * AbstractAlipay constructor.
+     *
+     * @param \Illuminate\Config\Repository $config
+     */
+    public function __construct(Repository $config)
+    {
+        $this->config = $config;
+    }
 
     /**
      * Check order arguments.

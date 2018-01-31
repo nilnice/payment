@@ -2,13 +2,20 @@
 
 namespace Nilnice\Payment;
 
-use Illuminate\Contracts\Config\Repository;
+use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Nilnice\Payment\Alipay\Traits\RequestTrait;
 use Nilnice\Payment\Alipay\Traits\SecurityTrait;
 use Nilnice\Payment\Exception\GatewayException;
 
+/**
+ * @method Alipay\BarPayment bar(array $array)
+ * @method Alipay\ScanPayment scan(array $array)
+ * @method Alipay\AppPayment app(array $array)
+ * @method Alipay\WapPayment wap(array $array)
+ * @method Alipay\WebPayment web(array $array)
+ */
 class Alipay implements GatewayInterface
 {
     use RequestTrait;
@@ -32,12 +39,12 @@ class Alipay implements GatewayInterface
     /**
      * Alipay constructor.
      *
-     * @param \Illuminate\Contracts\Config\Repository $config
+     * @param array $config
      */
-    public function __construct(Repository $config)
+    public function __construct(array $config)
     {
-        $this->config = $config;
-        $env = $config->get('env', 'pro');
+        $this->config = new Repository($config);
+        $env = $this->config->get('env', 'pro');
         $this->gateway = self::getGatewayUrl($env);
         $this->payload = [
             // 支付宝分配给开发者的应用 ID
@@ -84,7 +91,7 @@ class Alipay implements GatewayInterface
      */
     public function __call(string $method, array $arguments)
     {
-        return $this->pay($method, ...$arguments);
+        return $this->dispatcher($method, ...$arguments);
     }
 
     /**
@@ -96,7 +103,7 @@ class Alipay implements GatewayInterface
      * @return mixed
      * @throws \Nilnice\Payment\Exception\GatewayException
      */
-    public function pay(string $gateway, array $array = [])
+    public function dispatcher(string $gateway, array $array = [])
     {
         $this->payload['biz_content'] = $array;
         $class = \get_class($this) . '\\' . Str::studly($gateway) . 'Payment';

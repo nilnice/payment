@@ -2,17 +2,18 @@
 
 namespace Nilnice\Payment\Test;
 
+use Nilnice\Payment\Alipay;
 use Nilnice\Payment\Exception\GatewayException;
 use Nilnice\Payment\Exception\InvalidKeyException;
 use Nilnice\Payment\GatewayInterface;
-use Nilnice\Payment\Payment;
+use Nilnice\Payment\Wechat;
 use PHPUnit\Framework\TestCase;
 
 class PaymentTest extends TestCase
 {
     public function testAlipay()
     {
-        $alipay = Payment::alipay(['foo' => 'bar']);
+        $alipay = new Alipay(['foo' => 'bar']);
         self::assertInstanceOf(GatewayInterface::class, $alipay);
     }
 
@@ -24,13 +25,13 @@ class PaymentTest extends TestCase
             'subject'      => '支付宝-测试订单',
         ];
         $this->expectException(InvalidKeyException::class);
-        Payment::alipay(['foo' => 'bar', 'env' => 'dev'])
-               ->web($order);
+        $alipay = new Alipay(['foo' => 'bar', 'env' => 'dev']);
+        $alipay->web($order);
     }
 
     public function testWechat()
     {
-        $wechat = Payment::wechat(['foo' => 'bar']);
+        $wechat = new Wechat(['foo' => 'bar']);
 
         self::assertInstanceOf(GatewayInterface::class, $wechat);
     }
@@ -43,14 +44,14 @@ class PaymentTest extends TestCase
             'body'         => '微信支付-测试订单',
         ];
         $this->expectException(InvalidKeyException::class);
-        Payment::wechat(['foo' => 'bar', 'env' => 'dev'])
-               ->wap($order);
+        $wechat = new Wechat(['foo' => 'bar', 'env' => 'dev']);
+        $wechat->wap($order);
     }
 
     public function testGatewayException()
     {
         $this->expectException(GatewayException::class);
 
-        Payment::undefined([]);
+        (new Alipay([]))->test([]);
     }
 }
