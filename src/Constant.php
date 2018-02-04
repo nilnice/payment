@@ -88,7 +88,9 @@ final class Constant
     /**
      * 异常代码
      */
-    public const ALI_PAY_PUBLIC_KEY_INVALID = 1001;
-    public const ALI_PAY_PRIVATE_KEY_INVALID = 1002;
-    public const WX_PAY_KEY_INVALID = 1101;
+    public const ALI_PAY_PUBLIC_KEY_INVALID = 10001;
+    public const ALI_PAY_PRIVATE_KEY_INVALID = 10002;
+    public const ALI_PAY_SUCCESS = 10200;
+    public const WX_PAY_KEY_INVALID = 11001;
+    public const WX_PAY_SUCCESS = 11200;
 }
