@@ -24,14 +24,14 @@ install:
   - travis_retry composer install --no-interaction --prefer-source
 
 before_script:
-  - mkdir -p build/logs
+  - mkdir -p docs/logs
 
   # show some versions and env information
   - php --version
   - composer --version
 
 script:
-  - php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=build/logs/clover.xml
+  - php vendor/bin/phpunit -c phpunit.xml.dist --coverage-clover=docs/logs/clover.xml
 
 notifications:
   email: false
