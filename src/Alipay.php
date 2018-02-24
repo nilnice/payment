@@ -5,6 +5,9 @@ namespace Nilnice\Payment;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Monolog\Formatter\LineFormatter;
+use Monolog\Handler\StreamHandler;
+use Monolog\Logger;
 use Nilnice\Payment\Alipay\Traits\RequestTrait;
 use Nilnice\Payment\Alipay\Traits\SecurityTrait;
 use Nilnice\Payment\Exception\GatewayException;
@@ -40,6 +43,8 @@ class Alipay implements GatewayInterface
      * Alipay constructor.
      *
      * @param array $config
+     *
+     * @throws \Exception
      */
     public function __construct(array $config)
     {
@@ -80,6 +85,8 @@ class Alipay implements GatewayInterface
             // 业务请求参数的集合，最大长度不限，除公共参数外所有请求参数都必须放在这个参数中传递，具体参照各产品快速接入文档
             'biz_content' => '',
         ];
+
+        ! $this->config->has('log.file') ?: $this->registerLogger();
     }
 
     /**
@@ -107,13 +114,55 @@ class Alipay implements GatewayInterface
      */
     public function query($order) : Collection
     {
-        $key = $this->config->get('private_key');
-        $order = \is_array($order) ? $order : ['out_trade_no' => $order];
-        $this->payload['method'] = Constant::ALI_PAY_QUERY;
-        $this->payload['biz_content'] = json_encode($order);
-        $this->payload['sign'] = self::generateSign($this->payload, $key);
+        return $this->getOrderResult($order);
+    }
 
-        return $this->send($this->payload, $this->config->get('public_key'));
+    /**
+     * Close an order.
+     *
+     * @param array|string $order
+     *
+     * @return \Illuminate\Support\Collection
+     * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
+     * @throws \Nilnice\Payment\Exception\InvalidSignException
+     * @throws \RuntimeException
+     */
+    public function close($order) : Collection
+    {
+        return $this->getOrderResult($order, __FUNCTION__);
+    }
+
+    /**
+     * Cancel an order.
+     *
+     * @param array|string $order
+     *
+     * @return \Illuminate\Support\Collection
+     * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
+     * @throws \Nilnice\Payment\Exception\InvalidSignException
+     * @throws \RuntimeException
+     */
+    public function cancel($order) : Collection
+    {
+        return $this->getOrderResult($order, __FUNCTION__);
+    }
+
+    /**
+     * Refund an order.
+     *
+     * @param array|string $order
+     *
+     * @return \Illuminate\Support\Collection
+     * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
+     * @throws \Nilnice\Payment\Exception\InvalidSignException
+     * @throws \RuntimeException
+     */
+    public function refund($order) : Collection
+    {
+        return $this->getOrderResult($order, __FUNCTION__);
     }
 
     /**
@@ -139,6 +188,23 @@ class Alipay implements GatewayInterface
     }
 
     /**
+     * @throws \Exception
+     */
+    protected function registerLogger()
+    {
+        $handler = new StreamHandler(
+            $this->config->get('log.file'),
+            $this->config->get('log.level', Logger::WARNING)
+        );
+        $formatter = new LineFormatter();
+        $handler->setFormatter($formatter);
+
+        $logger = new Logger('Alipay');
+        $logger->pushHandler($handler);
+        Log::setLogger($logger);
+    }
+
+    /**
      * Pay dispatcher.
      *
      * @param string $gateway
@@ -157,6 +223,49 @@ class Alipay implements GatewayInterface
         }
 
         throw new GatewayException("Pay gateway [{$gateway}] not exists.", 1);
+    }
+
+    /**
+     * Get order result.
+     *
+     * @param array|string $order
+     * @param string       $type
+     *
+     * @return \Illuminate\Support\Collection
+     * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
+     * @throws \Nilnice\Payment\Exception\InvalidSignException
+     * @throws \RuntimeException
+     */
+    private function getOrderResult($order, $type = 'query') : Collection
+    {
+        $order = \is_array($order) ? $order : ['out_trade_no' => $order];
+        switch (trim($type)) {
+            case 'close':
+                $method = Constant::ALI_PAY_CLOSE;
+                break;
+            case 'cancel':
+                $method = Constant::ALI_PAY_CANCEL;
+                break;
+            case 'refund':
+                $method = Constant::ALI_PAY_REFUND;
+                break;
+            default:
+                $method = Constant::ALI_PAY_QUERY;
+                break;
+        }
+        $this->payload['method'] = $method;
+        $this->payload['biz_content'] = json_encode($order);
+        $this->payload['sign'] = self::generateSign(
+            $this->payload,
+            $this->config->get('private_key')
+        );
+        Log::debug(ucfirst($type) . ' an order:', [
+            $this->gateway,
+            $this->payload,
+        ]);
+
+        return $this->send($this->payload, $this->config->get('public_key'));
     }
 
     /**

@@ -88,6 +88,42 @@ class Wechat implements GatewayInterface
     }
 
     /**
+     * Close an order.
+     *
+     * @param array|string $order
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function close($order) : Collection
+    {
+        return new Collection([]);
+    }
+
+    /**
+     * Cancel an order.
+     *
+     * @param array|string $order
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function cancel($order) : Collection
+    {
+        return new Collection([]);
+    }
+
+    /**
+     * Refund an order.
+     *
+     * @param array|string $order
+     *
+     * @return \Illuminate\Support\Collection
+     */
+    public function refund($order) : Collection
+    {
+        return new Collection([]);
+    }
+
+    /**
      * To pay.
      *
      * @param string $gateway

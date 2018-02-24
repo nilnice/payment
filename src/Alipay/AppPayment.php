@@ -4,6 +4,7 @@ namespace Nilnice\Payment\Alipay;
 
 use Illuminate\Support\Arr;
 use Nilnice\Payment\Constant;
+use Nilnice\Payment\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class AppPayment extends AbstractAlipay
@@ -29,6 +30,9 @@ class AppPayment extends AbstractAlipay
         $payload['method'] = Constant::ALI_PAY_APP_PAY;
         $payload['biz_content'] = json_encode($content);
         $payload['sign'] = self::generateSign($payload, $key);
+
+        Log::debug('App order:', [$gateway, $payload]);
+
         $body = http_build_query($payload);
 
         return Response::create($body);

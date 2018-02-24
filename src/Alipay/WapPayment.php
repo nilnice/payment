@@ -5,6 +5,7 @@ namespace Nilnice\Payment\Alipay;
 use Illuminate\Support\Arr;
 use Nilnice\Payment\Alipay\Traits\FormTrait;
 use Nilnice\Payment\Constant;
+use Nilnice\Payment\Log;
 use Symfony\Component\HttpFoundation\Response;
 
 class WapPayment extends AbstractAlipay
@@ -32,6 +33,9 @@ class WapPayment extends AbstractAlipay
         $payload['method'] = Constant::ALI_PAY_WAP_PAY;
         $payload['biz_content'] = json_encode($content);
         $payload['sign'] = self::generateSign($payload, $key);
+
+        Log::debug('Wap order:', [$gateway, $payload]);
+
         $body = $this->buildRequestForm($gateway, $payload);
 
         return Response::create($body);

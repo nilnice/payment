@@ -80,7 +80,7 @@ class Log
     protected static function getLoggerInstance() : Logger
     {
         $maxFiles = 7;
-        $filename = sys_get_temp_dir() . '/logs/pay.log';
+        $filename = sys_get_temp_dir() . '/logs/payment.log';
         $handler = new RotatingFileHandler($filename, $maxFiles);
         $handler->setFilenameFormat('{date}-{filename}', 'Y-m-d');
         $formatter = new LineFormatter(null, null, true, true);
