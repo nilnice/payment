@@ -60,7 +60,7 @@ class Alipay implements GatewayInterface
             'return_url'  => $this->config->get('return_url'),
 
             // 请求使用的编码格式，如：UTF-8, GBK, GB2312 等
-            'charset'     => 'utf-8',
+            'charset'     => 'UTF-8',
 
             // 商户生成签名字符串所使用的签名算法类型，目前支持 RSA2 和 RSA，推荐使用 RSA2
             'sign_type'   => 'RSA2',

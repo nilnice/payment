@@ -40,7 +40,7 @@ abstract class AbstractAlipay implements PaymentInterface
         $required = ['out_trade_no', 'total_amount', 'subject'];
         foreach ($required as $key => $item) {
             if (! array_key_exists($item, $order)) {
-                throw new \InvalidArgumentException("The {$item} field is required");
+                throw new \InvalidArgumentException("The {$item} field is required.");
             }
         }
     }

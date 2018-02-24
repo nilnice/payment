@@ -108,13 +108,11 @@ trait SecurityTrait
             ? mb_convert_encoding(
                 json_encode($array, JSON_UNESCAPED_UNICODE),
                 'GB2312',
-                'UTF-8'
-            )
+                'UTF-8')
             : self::getSignContent($array, true);
         $sign = base64_decode($sign);
-        $result = openssl_verify($data, $sign, $key, OPENSSL_ALGO_SHA256) === 1;
 
-        return $result === 1;
+        return openssl_verify($data, $sign, $key, OPENSSL_ALGO_SHA256) === 1;
     }
 
     /**
