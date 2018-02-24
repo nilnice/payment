@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use Nilnice\Payment\Constant;
 use Nilnice\Payment\Exception\GatewayException;
 use Nilnice\Payment\Exception\InvalidSignException;
+use Nilnice\Payment\Log;
 use Psr\Http\Message\ResponseInterface;
 
 trait RequestTrait
@@ -35,6 +36,8 @@ trait RequestTrait
         $data = Arr::get($result, $method);
         $sign = Arr::get($result, 'sign');
         if (! self::verifySign($data, $key, true, $sign)) {
+            Log::warning('Alipay sign verify failed:', $data);
+
             throw new InvalidSignException(
                 'Invalid Alipay [signature] verify.',
                 3
@@ -44,6 +47,8 @@ trait RequestTrait
         if ('10000' === $code = Arr::get($result, "{$method}.code")) {
             return new Collection($data);
         }
+
+        Log::warning('Alipay business failed:', $data);
 
         throw new GatewayException(
             "Gateway Alipay [{$data['msg']}] error.",
