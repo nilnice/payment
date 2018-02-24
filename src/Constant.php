@@ -88,6 +88,18 @@ final class Constant
     public const ALI_PAY_BAR_PAY = 'alipay.trade.pay'; // 统一收单交易支付接口（条码支付）
 
     /**
+     * 支付宝转账
+     */
+
+    // 单笔转账到支付宝账户接口
+    public const ALI_PAY_TRANSFER = 'alipay.fund.trans.toaccount.transfer';
+
+    // 查询转账订单接口
+    public const ALI_PAY_TRANSFER_QUERY = 'alipay.fund.trans.order.query';
+
+    public const ALI_PAY_TRANSFER_PRO_CODE = ['product_code' => ''];
+
+    /**
      * 微信支付公共 API 列表
      */
     public const WX_PAY_PRO_URI = 'https://api.mch.weixin.qq.com/'; // 国内接入点

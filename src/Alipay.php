@@ -13,9 +13,10 @@ use Nilnice\Payment\Alipay\Traits\SecurityTrait;
 use Nilnice\Payment\Exception\GatewayException;
 
 /**
+ * @method Alipay\AppPayment app(array $array)
  * @method Alipay\BarPayment bar(array $array)
  * @method Alipay\ScanPayment scan(array $array)
- * @method Alipay\AppPayment app(array $array)
+ * @method Alipay\TransferPayment transfer(array $array)
  * @method Alipay\WapPayment wap(array $array)
  * @method Alipay\WebPayment web(array $array)
  */
