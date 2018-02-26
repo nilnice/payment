@@ -13,6 +13,8 @@ use Symfony\Component\HttpFoundation\Request;
  */
 class Wechat implements GatewayInterface
 {
+    use LogTrait;
+
     /**
      * @var \Illuminate\Contracts\Config\Repository
      */
@@ -32,6 +34,8 @@ class Wechat implements GatewayInterface
      * Wechat constructor.
      *
      * @param array $config
+     *
+     * @throws \Exception
      */
     public function __construct(array $config)
     {
@@ -51,7 +55,7 @@ class Wechat implements GatewayInterface
             // 签名
             'sign'             => '',
 
-            // 终端 IP - 必须传正确的用户端 IP
+            // 终端 IP - 必须传正确的客户端 IP
             'spbill_create_ip' => Request::createFromGlobals()->getClientIp(),
 
             // 通知地址 - 接收微信支付异步通知回调地址，通知 url 必须为直接可访问的 url，不能携带参数
@@ -60,6 +64,10 @@ class Wechat implements GatewayInterface
             // 交易类型 - H5 支付的交易类型为 MWEB
             'trade_type'       => '',
         ];
+
+        if (! $this->config->has('log.file')) {
+            $this->registerLogger($this->config);
+        }
     }
 
     /**

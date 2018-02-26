@@ -3,6 +3,8 @@
 namespace Nilnice\Payment\Wechat;
 
 use Nilnice\Payment\Constant;
+use Symfony\Component\HttpFoundation\RedirectResponse;
+use Symfony\Component\HttpFoundation\Response;
 
 class WapPayment extends AbstractWechat
 {
@@ -12,23 +14,26 @@ class WapPayment extends AbstractWechat
      * @param string $gateway
      * @param array  $payload
      *
+     * @return \Symfony\Component\HttpFoundation\Response
      * @throws \InvalidArgumentException
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
      * @throws \RuntimeException
      */
-    public function toPay(string $gateway, array $payload)
+    public function toPay(string $gateway, array $payload) : Response
     {
         $payload['trade_type'] = Constant::WX_PAY_WAP_TYPE;
         $object = $this->prepare(Constant::WX_PAY_PREPARE_URI, $payload);
         $returnUrl = $this->config->get('return_url');
+        $mwebUrl = $object->get('mweb_url');
 
         if (null === $returnUrl) {
-            $url = $object->url;
+            $url = $mwebUrl;
         } else {
-            $url = $object->url . '&redirect_url=' . urlencode($returnUrl);
+            $url = $mwebUrl . '&redirect_url=' . urlencode($returnUrl);
         }
-        echo $url;
+
+        return RedirectResponse::create($url);
     }
 }

@@ -116,7 +116,7 @@ final class Constant
     /**
      * 微信扫码支付 - 用户打开微信扫一扫，扫描商户的二维码后完成支付
      */
-    public const WX_PAY_WAP_TYPE = 'MWEB';
+    public const WX_PAY_WAP_TYPE = 'NATIVE';
 
     /**
      * 微信公众号支付 - 用户在微信内进入商家 H5 页面，页面内调用 JSSDK 完成支付

@@ -46,7 +46,7 @@ trait SecurityTrait
         $string = '';
         foreach ($array as $key => $val) {
             if ($key !== 'sign' && $val !== '' && ! \is_array($val)) {
-                $string .= $key . '=' . $val;
+                $string .= $key . '=' . $val . '&';
             }
         }
 

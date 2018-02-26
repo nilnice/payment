@@ -22,6 +22,7 @@ use Nilnice\Payment\Exception\GatewayException;
  */
 class Alipay implements GatewayInterface
 {
+    use LogTrait;
     use RequestTrait;
     use SecurityTrait;
 
@@ -87,7 +88,9 @@ class Alipay implements GatewayInterface
             'biz_content' => '',
         ];
 
-        ! $this->config->has('log.file') ?: $this->registerLogger();
+        if (! $this->config->has('log.file')) {
+            $this->registerLogger($this->config);
+        }
     }
 
     /**
@@ -186,23 +189,6 @@ class Alipay implements GatewayInterface
             "Pay gateway [{$gateway}] must be an instance of the GatewayInterface.",
             2
         );
-    }
-
-    /**
-     * @throws \Exception
-     */
-    protected function registerLogger()
-    {
-        $handler = new StreamHandler(
-            $this->config->get('log.file'),
-            $this->config->get('log.level', Logger::WARNING)
-        );
-        $formatter = new LineFormatter();
-        $handler->setFormatter($formatter);
-
-        $logger = new Logger('Alipay');
-        $logger->pushHandler($handler);
-        Log::setLogger($logger);
     }
 
     /**
