@@ -15,6 +15,7 @@ class WapPayment extends AbstractWechat
      * @param array  $payload
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
      * @throws \InvalidArgumentException
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException

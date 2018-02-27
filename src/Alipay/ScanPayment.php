@@ -3,6 +3,7 @@
 namespace Nilnice\Payment\Alipay;
 
 use Illuminate\Support\Arr;
+use Illuminate\Support\Collection;
 use Nilnice\Payment\Constant;
 use Nilnice\Payment\Log;
 
@@ -14,14 +15,15 @@ class ScanPayment extends AbstractAlipay
      * @param string $gateway
      * @param array  $payload
      *
-     * @return mixed|void
+     * @return \Illuminate\Support\Collection
+     *
      * @throws \InvalidArgumentException
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
      * @throws \RuntimeException
      */
-    public function toPay(string $gateway, array $payload)
+    public function toPay(string $gateway, array $payload) : Collection
     {
         $key = $this->config->get('private_key');
         $content = array_merge(

@@ -4,7 +4,6 @@ namespace Nilnice\Payment\Wechat;
 
 use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
-use Nilnice\Payment\Log;
 use Nilnice\Payment\PaymentInterface;
 use Nilnice\Payment\Wechat\Traits\RequestTrait;
 use Nilnice\Payment\Wechat\Traits\SecurityTrait;
@@ -45,6 +44,7 @@ abstract class AbstractWechat implements PaymentInterface
      * @param array  $payload
      *
      * @return \Illuminate\Support\Collection
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \InvalidArgumentException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException

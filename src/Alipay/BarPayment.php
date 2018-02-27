@@ -16,6 +16,7 @@ class BarPayment extends AbstractAlipay
      * @param array  $payload
      *
      * @return \Illuminate\Support\Collection
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException

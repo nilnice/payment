@@ -69,6 +69,7 @@ trait RequestTrait
      * @param array  ...$options
      *
      * @return mixed
+     *
      * @throws \RuntimeException
      */
     public function post(
@@ -94,6 +95,7 @@ trait RequestTrait
      * @param array  $options
      *
      * @return mixed
+     *
      * @throws \RuntimeException
      */
     public function request(
@@ -122,6 +124,7 @@ trait RequestTrait
      * @param array $array
      *
      * @return string
+     *
      * @throws \InvalidArgumentException
      */
     public static function toXml(array $array) : string
@@ -147,6 +150,7 @@ trait RequestTrait
      * @param string $xml
      *
      * @return array
+     *
      * @throws \InvalidArgumentException
      */
     public static function fromXml(string $xml) : array
@@ -174,6 +178,7 @@ trait RequestTrait
      * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return mixed
+     *
      * @throws \RuntimeException
      */
     protected function jsonResponse(ResponseInterface $response)

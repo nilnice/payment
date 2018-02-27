@@ -19,6 +19,7 @@ class WebPayment extends AbstractAlipay
      * @param array  $payload
      *
      * @return \Symfony\Component\HttpFoundation\Response
+     *
      * @throws \InvalidArgumentException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      */

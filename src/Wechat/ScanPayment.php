@@ -15,6 +15,7 @@ class ScanPayment extends AbstractWechat
      * @param array  $payload
      *
      * @return \Illuminate\Support\Collection
+     *
      * @throws \InvalidArgumentException
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException

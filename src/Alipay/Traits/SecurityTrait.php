@@ -16,6 +16,7 @@ trait SecurityTrait
      * @param null  $key
      *
      * @return string
+     *
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      */
     public static function generateSign(array $array, $key = null) : string
@@ -82,6 +83,7 @@ trait SecurityTrait
      * @param string|null $sign
      *
      * @return bool
+     *
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      */
     public static function verifySign(

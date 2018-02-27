@@ -77,6 +77,7 @@ class Wechat implements GatewayInterface
      * @param array  $arguments
      *
      * @return mixed
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      */
     public function __call(string $method, array $arguments)
@@ -156,6 +157,7 @@ class Wechat implements GatewayInterface
      * @param string $gateway
      *
      * @return mixed
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      */
     protected function toPay(string $gateway)
@@ -179,6 +181,7 @@ class Wechat implements GatewayInterface
      * @param array  $array
      *
      * @return mixed
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      */
     private function dispatcher(string $gateway, array $array = [])

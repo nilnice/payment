@@ -98,6 +98,7 @@ class Alipay implements GatewayInterface
      * @param array  $arguments
      *
      * @return mixed
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      */
     public function __call(string $method, array $arguments)
@@ -111,6 +112,7 @@ class Alipay implements GatewayInterface
      * @param array|string $order
      *
      * @return \Illuminate\Support\Collection
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
@@ -127,6 +129,7 @@ class Alipay implements GatewayInterface
      * @param array|string $order
      *
      * @return \Illuminate\Support\Collection
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
@@ -143,6 +146,7 @@ class Alipay implements GatewayInterface
      * @param array|string $order
      *
      * @return \Illuminate\Support\Collection
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
@@ -159,6 +163,7 @@ class Alipay implements GatewayInterface
      * @param array|string $order
      *
      * @return \Illuminate\Support\Collection
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
@@ -175,6 +180,7 @@ class Alipay implements GatewayInterface
      * @param string $gateway
      *
      * @return mixed
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      */
     protected function toPay(string $gateway)
@@ -198,6 +204,7 @@ class Alipay implements GatewayInterface
      * @param array  $array
      *
      * @return mixed
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      */
     private function dispatcher(string $gateway, array $array = [])
@@ -219,6 +226,7 @@ class Alipay implements GatewayInterface
      * @param string       $type
      *
      * @return \Illuminate\Support\Collection
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException

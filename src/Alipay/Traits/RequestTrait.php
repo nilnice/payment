@@ -20,6 +20,7 @@ trait RequestTrait
      * @param string $key
      *
      * @return \Illuminate\Support\Collection
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
@@ -64,6 +65,7 @@ trait RequestTrait
      * @param array  ...$options
      *
      * @return mixed
+     *
      * @throws \RuntimeException
      */
     public function post(
@@ -89,6 +91,7 @@ trait RequestTrait
      * @param array  $options
      *
      * @return mixed
+     *
      * @throws \RuntimeException
      */
     public function request(
@@ -117,6 +120,7 @@ trait RequestTrait
      * @param \Psr\Http\Message\ResponseInterface $response
      *
      * @return mixed
+     *
      * @throws \RuntimeException
      */
     protected function jsonResponse(ResponseInterface $response)

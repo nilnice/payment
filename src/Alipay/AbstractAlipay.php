@@ -33,6 +33,7 @@ abstract class AbstractAlipay implements PaymentInterface
      * @param array $order
      *
      * @return void
+     *
      * @throws \InvalidArgumentException
      */
     public static function check(array $order) : void
