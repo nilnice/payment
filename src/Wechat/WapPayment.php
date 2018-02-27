@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 class WapPayment extends AbstractWechat
 {
     /**
-     * To pay.
+     * Use wap(H5) to pay for order.
      *
      * @param string $gateway
      * @param array  $payload
@@ -24,7 +24,7 @@ class WapPayment extends AbstractWechat
     public function toPay(string $gateway, array $payload) : Response
     {
         $payload['trade_type'] = Constant::WX_PAY_WAP_TYPE;
-        $object = $this->prepare(Constant::WX_PAY_PREPARE_URI, $payload);
+        $object = $this->prepare(Constant::WX_PAY_PREPARE, $payload);
         $returnUrl = $this->config->get('return_url');
         $mwebUrl = $object->get('mweb_url');
 

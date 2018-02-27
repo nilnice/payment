@@ -4,10 +4,11 @@ namespace Nilnice\Payment\Wechat;
 
 use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
-use Nilnice\Payment\Constant;
+use Nilnice\Payment\Log;
 use Nilnice\Payment\PaymentInterface;
 use Nilnice\Payment\Wechat\Traits\RequestTrait;
 use Nilnice\Payment\Wechat\Traits\SecurityTrait;
+use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractWechat implements PaymentInterface
 {
@@ -30,6 +31,14 @@ abstract class AbstractWechat implements PaymentInterface
     }
 
     /**
+     * @return mixed
+     */
+    public function getClientIp()
+    {
+        return Request::createFromGlobals()->server->get('SERVER_ADDR');
+    }
+
+    /**
      * Pregenerating order.
      *
      * @param string $gateway
@@ -44,38 +53,9 @@ abstract class AbstractWechat implements PaymentInterface
      */
     protected function prepare(string $gateway, array $payload) : Collection
     {
-        $env = $this->config->get('env', 'pro');
         $key = $this->config->get('key');
         $payload['sign'] = self::generateSign($payload, $key);
-        $gateway = self::getGatewayUrl($env) . $gateway;
 
         return $this->send($gateway, $payload, $key);
-    }
-
-    /**
-     * Get gateway url.
-     *
-     * @param string $env
-     *
-     * @return string
-     */
-    private static function getGatewayUrl($env = '') : string
-    {
-        $uri = '';
-        switch ($env) {
-            case 'pro':
-                $uri = Constant::WX_PAY_PRO_URI;
-                break;
-            case 'dev':
-                $uri = Constant::WX_PAY_DEV_URI;
-                break;
-            case 'hk':
-                $uri = Constant::WX_PAY_PRO_HK_URI;
-                break;
-            default:
-                break;
-        }
-
-        return $uri;
     }
 }

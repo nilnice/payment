@@ -102,11 +102,51 @@ final class Constant
     /**
      * 微信支付公共 API 列表
      */
-    public const WX_PAY_PRO_URI = 'https://api.mch.weixin.qq.com/'; // 国内接入点
-    public const WX_PAY_DEV_URI = 'https://api.mch.weixin.qq.com/sandboxnew/'; // 仿真接入点
-    public const WX_PAY_PRO_HK_URI = 'https://apihk.mch.weixin.qq.com/'; // 东南亚接入点
-    public const WX_PAY_PREPARE_URI = 'pay/unifiedorder'; // 统一下单
-    public const WX_PAY_QUERY = 'pay/orderquery'; // 查询订单
+
+    // 国内接入点
+    public const WX_PAY_PRO_URI = 'https://api.mch.weixin.qq.com/';
+
+    // 仿真接入点
+    public const WX_PAY_DEV_URI = 'https://api.mch.weixin.qq.com/sandboxnew/';
+
+    // 东南亚接入点
+    public const WX_PAY_PRO_HK_URI = 'https://apihk.mch.weixin.qq.com/';
+
+    // 刷卡支付接口
+    public const WX_PAY_POS = 'pay/micropay';
+
+    // 统一下单接口
+    public const WX_PAY_PREPARE = 'pay/unifiedorder';
+
+    // 查询订单接口
+    public const WX_PAY_QUERY = 'pay/orderquery';
+
+    // 撤销订单接口
+    public const WX_PAY_REVERSE = 'pay/reverse';
+
+    // 申请退款接口
+    public const WX_PAY_REFUND = 'secapi/pay/refund';
+
+    // 查询退款接口
+    public const WX_PAY_REFUND_QUERY = 'pay/refundquery';
+
+    // 下载对账单接口
+    public const WX_PAY_DOWNLOAD_BILL = 'pay/downloadbill';
+
+    // 交易保障接口
+    public const WX_PAY_REPORT = 'payitil/report';
+
+    // 转换短链接接口
+    public const WX_PAY_SHORT_URL = 'tools/shorturl';
+
+    // 授权码查询 openid 接口
+    public const WX_PAY_AUTH_OPENID = 'tools/authcodetoopenid';
+
+    // 拉取订单评价数据接口
+    public const WX_PAY_QUERY_COMMENT = 'billcommentsp/batchquerycomment';
+
+    // 企业付款接口
+    public const WX_PAY_TRANSFER = 'mmpaymkttransfers/promotion/transfers';
 
     /**
      * 微信刷卡支付 - 用户打开微信钱包的刷卡的界面，商户扫码后提交完成支付
@@ -116,23 +156,27 @@ final class Constant
     /**
      * 微信扫码支付 - 用户打开微信扫一扫，扫描商户的二维码后完成支付
      */
-    public const WX_PAY_WAP_TYPE = 'NATIVE';
+    public const WX_PAY_SCAN_TYPE = 'NATIVE';
 
     /**
      * 微信公众号支付 - 用户在微信内进入商家 H5 页面，页面内调用 JSSDK 完成支付
      */
+    public const WX_PAY_PUB_TYPE = 'NATIVE';
 
     /**
      * 微信 APP 支付 - 商户 APP 中集成微信 SDK，用户点击后跳转到微信内完成支付
      */
+    public const WX_PAY_APP_TYPE = 'APP';
 
     /**
      * 微信 H5 支付 - 用户在微信以外的手机浏览器请求微信支付的场景唤起微信支付
      */
+    public const WX_PAY_WAP_TYPE = 'MWeb';
 
     /**
      * 微信小程序支付 - 用户在微信小程序中使用微信支付的场景
      */
+    public const WX_PAY_XCX_TYPE = 'MWeb';
 
     /**
      * 异常代码

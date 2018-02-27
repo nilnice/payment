@@ -88,8 +88,8 @@ class Alipay implements GatewayInterface
             'biz_content' => '',
         ];
 
-        if (! $this->config->has('log.file')) {
-            $this->registerLogger($this->config);
+        if ($this->config->has('log.file')) {
+            $this->registerLogger($this->config, 'Alipay');
         }
     }
 

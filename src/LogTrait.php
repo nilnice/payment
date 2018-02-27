@@ -11,10 +11,11 @@ trait LogTrait
 {
     /**
      * @param \Illuminate\Config\Repository $repository
+     * @param string                        $name
      *
      * @throws \Exception
      */
-    public function registerLogger(Repository $repository)
+    public function registerLogger(Repository $repository, string $name) : void
     {
         $handler = new StreamHandler(
             $repository->get('log.file'),
@@ -23,7 +24,7 @@ trait LogTrait
         $formatter = new LineFormatter();
         $handler->setFormatter($formatter);
 
-        $logger = new Logger('Alipay');
+        $logger = new Logger($name);
         $logger->pushHandler($handler);
         Log::setLogger($logger);
     }

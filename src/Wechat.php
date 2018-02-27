@@ -9,7 +9,9 @@ use Nilnice\Payment\Exception\GatewayException;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
+ * @method Wechat\AppPayment app(array $array)
  * @method Wechat\WapPayment wap(array $array)
+ * @method Wechat\ScanPayment scan(array $array)
  */
 class Wechat implements GatewayInterface
 {
@@ -44,7 +46,7 @@ class Wechat implements GatewayInterface
         $this->gateway = self::getGatewayUrl($env);
         $this->payload = [
             // 公众账号 ID - 微信分配的公众账号 ID
-            'appid'            => $this->config->get('app_id', ''),
+            'appid'            => '',
 
             // 商户号 - 微信支付分配的商户号
             'mch_id'           => $this->config->get('mch_id', ''),
@@ -65,8 +67,8 @@ class Wechat implements GatewayInterface
             'trade_type'       => '',
         ];
 
-        if (! $this->config->has('log.file')) {
-            $this->registerLogger($this->config);
+        if ($this->config->has('log.file')) {
+            $this->registerLogger($this->config, 'Wxpay');
         }
     }
 
@@ -79,6 +81,23 @@ class Wechat implements GatewayInterface
      */
     public function __call(string $method, array $arguments)
     {
+        switch ($method) {
+            case 'app': // APP 支付
+                $this->payload['appid'] = $this->config->get('app_appid');
+                break;
+            case 'wap': // H5 支付
+            case 'bar': // 刷卡支付
+            case 'scan': // 扫码支付
+                $this->payload['appid'] = $this->config->get('app_id');
+                break;
+            case 'pub': // 公众号支付
+                $this->payload['appid'] = $this->config->get('pub_appid');
+                break;
+            case 'xcx': // 小程序支付
+                $this->payload['appid'] = $this->config->get('xcx_appid');
+                break;
+        }
+
         return $this->dispatcher($method, ...$arguments);
     }
 
@@ -184,10 +203,18 @@ class Wechat implements GatewayInterface
     private static function getGatewayUrl($env = '') : string
     {
         $uri = '';
-        if ($env === 'pro') {
-            $uri = Constant::WX_PAY_PRO_URI;
-        } elseif ($env === 'dev') {
-            $uri = Constant::WX_PAY_DEV_URI;
+        switch ($env) {
+            case 'pro':
+                $uri = Constant::WX_PAY_PRO_URI;
+                break;
+            case 'dev':
+                $uri = Constant::WX_PAY_DEV_URI;
+                break;
+            case 'hk':
+                $uri = Constant::WX_PAY_PRO_HK_URI;
+                break;
+            default:
+                break;
         }
 
         return $uri;

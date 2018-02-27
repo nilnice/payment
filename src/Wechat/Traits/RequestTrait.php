@@ -15,9 +15,11 @@ trait RequestTrait
     /**
      * Send a Wechat interface request.
      *
-     * @param string $gateway
-     * @param array  $array
-     * @param string $key
+     * @param string      $gateway
+     * @param array       $array
+     * @param string      $key
+     * @param string|null $certClient
+     * @param string|null $certKey
      *
      * @return \Illuminate\Support\Collection
      * @throws \Nilnice\Payment\Exception\GatewayException
@@ -29,15 +31,22 @@ trait RequestTrait
     public function send(
         string $gateway,
         array $array,
-        string $key
+        string $key,
+        string $certClient = null,
+        string $certKey = null
     ) : Collection {
-        $result = $this->post($gateway, self::toXml($array), []);
+        $cert = ($certClient !== null && $certKey !== null)
+            ? ['cert' => $certClient, 'ssl_key' => $certKey]
+            : [];
+        $result = $this->post($gateway, self::toXml($array), $cert);
         $result = \is_array($result) ? $result : self::fromXml($result);
         $code = Arr::get($result, 'result_code');
 
-        if ($code !== 'SUCCESS') {
+        if (Arr::get($result, 'return_code') !== 'SUCCESS'
+            || Arr::get($result, 'result_code') !== 'SUCCESS'
+        ) {
             throw new GatewayException(
-                'Wechat API Error: ' . $result['return_msg'],
+                'Wxpay API Error: ' . $result['return_msg'],
                 20000
             );
         }
@@ -47,7 +56,7 @@ trait RequestTrait
         }
 
         throw new InvalidSignException(
-            'Invalid Alipay [signature] verify.',
+            'Invalid Wxpay [signature] verify.',
             3
         );
     }
