@@ -3,6 +3,7 @@
 namespace Nilnice\Payment\Wechat\Traits;
 
 use GuzzleHttp\Client;
+use Illuminate\Config\Repository;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Collection;
 use Nilnice\Payment\Constant;
@@ -12,6 +13,8 @@ use Psr\Http\Message\ResponseInterface;
 
 trait RequestTrait
 {
+    use SecurityTrait;
+
     /**
      * Send a Wechat interface request.
      *
@@ -24,7 +27,6 @@ trait RequestTrait
      * @return \Illuminate\Support\Collection
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \InvalidArgumentException
-     * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
      * @throws \RuntimeException
      */
@@ -40,11 +42,12 @@ trait RequestTrait
             : [];
         $result = $this->post($gateway, self::toXml($array), $cert);
         $result = \is_array($result) ? $result : self::fromXml($result);
-        $code = Arr::get($result, 'result_code');
 
-        if (Arr::get($result, 'return_code') !== 'SUCCESS'
-            || Arr::get($result, 'result_code') !== 'SUCCESS'
-        ) {
+        $flag = 'SUCCESS';
+        $returnCode = Arr::get($result, 'return_code');
+        $resultCode = Arr::get($result, 'result_code');
+
+        if ($flag !== $returnCode || $flag !== $resultCode) {
             throw new GatewayException(
                 'Wxpay API Error: ' . $result['return_msg'],
                 20000
@@ -116,6 +119,30 @@ trait RequestTrait
         $response = $client->{$method}($gateway, $options);
 
         return $this->jsonResponse($response);
+    }
+
+    /**
+     * Filter payload.
+     *
+     * @param array                         $payload
+     * @param array|string                  $order
+     * @param \Illuminate\Config\Repository $config
+     *
+     * @return array
+     */
+    public static function filterPayload(
+        array $payload,
+        $order,
+        Repository $config
+    ) : array {
+        $order = \is_array($order) ? $order : ['out_trade_no' => $order];
+        $payload = array_merge($payload, $order);
+
+        unset($payload['notify_url'], $payload['trade_type'], $payload['type']);
+
+        $payload['sign'] = self::generateSign($payload, $config->get('key'));
+
+        return $payload;
     }
 
     /**

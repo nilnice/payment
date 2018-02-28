@@ -26,6 +26,7 @@ class WapPayment extends AbstractWechat
     {
         $payload['trade_type'] = Constant::WX_PAY_WAP_TYPE;
         $object = $this->prepare(Constant::WX_PAY_PREPARE, $payload);
+        dd($object);
         $returnUrl = $this->config->get('return_url');
         $mwebUrl = $object->get('mweb_url');
 

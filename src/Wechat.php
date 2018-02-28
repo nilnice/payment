@@ -5,6 +5,7 @@ namespace Nilnice\Payment;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
+use Nilnice\Payment\Wechat\Traits\RequestTrait;
 use Nilnice\Payment\Exception\GatewayException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -16,6 +17,7 @@ use Symfony\Component\HttpFoundation\Request;
 class Wechat implements GatewayInterface
 {
     use LogTrait;
+    use RequestTrait;
 
     /**
      * @var \Illuminate\Contracts\Config\Repository
@@ -82,26 +84,10 @@ class Wechat implements GatewayInterface
      */
     public function __call(string $method, array $arguments)
     {
-        switch ($method) {
-            case 'app': // APP 支付
-                $this->payload['appid'] = $this->config->get('app_appid');
-                break;
-            case 'wap': // H5 支付
-            case 'bar': // 刷卡支付
-            case 'scan': // 扫码支付
-                $this->payload['appid'] = $this->config->get('app_id');
-                break;
-            case 'pub': // 公众号支付
-                $this->payload['appid'] = $this->config->get('pub_appid');
-                break;
-            case 'xcx': // 小程序支付
-                $this->payload['appid'] = $this->config->get('xcx_appid');
-                break;
-        }
+        $this->setAppId($method);
 
         return $this->dispatcher($method, ...$arguments);
     }
-
 
     /**
      * Query an order information.
@@ -109,10 +95,23 @@ class Wechat implements GatewayInterface
      * @param array|string $order
      *
      * @return \Illuminate\Support\Collection
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidSignException
+     * @throws \RuntimeException
      */
     public function query($order) : Collection
     {
-        return new Collection([]);
+        $this->setAppId();
+        $this->payload = self::filterPayload(
+            $this->payload,
+            $order,
+            $this->config
+        );
+        $gateway = Constant::WX_PAY_QUERY;
+
+        return $this->send($gateway, $this->payload, $this->config->get('key'));
     }
 
     /**
@@ -121,10 +120,24 @@ class Wechat implements GatewayInterface
      * @param array|string $order
      *
      * @return \Illuminate\Support\Collection
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidSignException
+     * @throws \RuntimeException
      */
     public function close($order) : Collection
     {
-        return new Collection([]);
+        $this->setAppId();
+        unset($this->payload['spbill_create_ip']);
+        $this->payload = self::filterPayload(
+            $this->payload,
+            $order,
+            $this->config
+        );
+        $gateway = Constant::WX_PAY_CLOSE;
+
+        return $this->send($gateway, $this->payload, $this->config->get('key'));
     }
 
     /**
@@ -145,10 +158,27 @@ class Wechat implements GatewayInterface
      * @param array|string $order
      *
      * @return \Illuminate\Support\Collection
+     *
+     * @throws \InvalidArgumentException
+     * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidSignException
+     * @throws \RuntimeException
      */
     public function refund($order) : Collection
     {
-        return new Collection([]);
+        $this->payload = self::filterPayload(
+            $this->payload,
+            $order,
+            $this->config
+        );
+
+        return $this->send(
+            Constant::WX_PAY_REFUND,
+            $this->payload,
+            $this->config->get('key'),
+            $this->config->get('cert_client'),
+            $this->config->get('cert_key')
+        );
     }
 
     /**
@@ -194,6 +224,31 @@ class Wechat implements GatewayInterface
         }
 
         throw new GatewayException("Pay gateway [{$gateway}] not exists", 1);
+    }
+
+    /**
+     * Set app identify.
+     *
+     * @param string $method
+     */
+    private function setAppId($method = 'wap')
+    {
+        switch ($method) {
+            case 'app': // APP 支付
+                $this->payload['appid'] = $this->config->get('app_appid');
+                break;
+            case 'wap': // H5 支付
+            case 'bar': // 刷卡支付
+            case 'scan': // 扫码支付
+                $this->payload['appid'] = $this->config->get('app_id');
+                break;
+            case 'pub': // 公众号支付
+                $this->payload['appid'] = $this->config->get('pub_appid');
+                break;
+            case 'xcx': // 小程序支付
+                $this->payload['appid'] = $this->config->get('xcx_appid');
+                break;
+        }
     }
 
     /**

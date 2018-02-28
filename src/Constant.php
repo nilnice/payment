@@ -121,6 +121,9 @@ final class Constant
     // 查询订单接口
     public const WX_PAY_QUERY = 'pay/orderquery';
 
+    // 关闭订单
+    public const WX_PAY_CLOSE = 'pay/closeorder';
+
     // 撤销订单接口
     public const WX_PAY_REVERSE = 'pay/reverse';
 
@@ -169,14 +172,14 @@ final class Constant
     public const WX_PAY_APP_TYPE = 'APP';
 
     /**
-     * 微信 H5 支付 - 用户在微信以外的手机浏览器请求微信支付的场景唤起微信支付
+     * 微信 Wap(H5) 支付 - 用户在微信以外的手机浏览器请求微信支付的场景唤起微信支付
      */
-    public const WX_PAY_WAP_TYPE = 'MWeb';
+    public const WX_PAY_WAP_TYPE = 'MWEB';
 
     /**
      * 微信小程序支付 - 用户在微信小程序中使用微信支付的场景
      */
-    public const WX_PAY_XCX_TYPE = 'MWeb';
+    public const WX_PAY_XCX_TYPE = 'MWEB';
 
     /**
      * 异常代码
