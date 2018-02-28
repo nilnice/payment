@@ -13,8 +13,6 @@ use Psr\Http\Message\ResponseInterface;
 
 trait RequestTrait
 {
-    use SecurityTrait;
-
     /**
      * Send a Wechat interface request.
      *
@@ -25,8 +23,10 @@ trait RequestTrait
      * @param string|null $certKey
      *
      * @return \Illuminate\Support\Collection
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \InvalidArgumentException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
      * @throws \RuntimeException
      */
@@ -129,6 +129,8 @@ trait RequestTrait
      * @param \Illuminate\Config\Repository $config
      *
      * @return array
+     *
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
      */
     public static function filterPayload(
         array $payload,

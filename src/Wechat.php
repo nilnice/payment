@@ -5,7 +5,6 @@ namespace Nilnice\Payment;
 use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
-use Nilnice\Payment\Wechat\Traits\RequestTrait;
 use Nilnice\Payment\Exception\GatewayException;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -17,7 +16,6 @@ use Symfony\Component\HttpFoundation\Request;
 class Wechat implements GatewayInterface
 {
     use LogTrait;
-    use RequestTrait;
 
     /**
      * @var \Illuminate\Contracts\Config\Repository
@@ -149,7 +147,9 @@ class Wechat implements GatewayInterface
      */
     public function cancel($order) : Collection
     {
-        return new Collection([]);
+        trigger_error('Wechat did not cancel API, please use close API.');
+
+        return new Collection();
     }
 
     /**

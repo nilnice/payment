@@ -11,8 +11,8 @@ use Symfony\Component\HttpFoundation\Request;
 
 abstract class AbstractWechat implements PaymentInterface
 {
-    use SecurityTrait;
     use RequestTrait;
+    use SecurityTrait;
 
     /**
      * @var \Illuminate\Config\Repository
