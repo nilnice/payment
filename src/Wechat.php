@@ -6,6 +6,8 @@ use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Str;
 use Nilnice\Payment\Exception\GatewayException;
+use Nilnice\Payment\Wechat\Traits\RequestTrait;
+use Nilnice\Payment\Wechat\Traits\SecurityTrait;
 use Symfony\Component\HttpFoundation\Request;
 
 /**
@@ -16,6 +18,8 @@ use Symfony\Component\HttpFoundation\Request;
 class Wechat implements GatewayInterface
 {
     use LogTrait;
+    use RequestTrait;
+    use SecurityTrait;
 
     /**
      * @var \Illuminate\Contracts\Config\Repository
@@ -95,7 +99,9 @@ class Wechat implements GatewayInterface
      * @return \Illuminate\Support\Collection
      *
      * @throws \InvalidArgumentException
+     *
      * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
      * @throws \RuntimeException
      */
@@ -121,6 +127,7 @@ class Wechat implements GatewayInterface
      *
      * @throws \InvalidArgumentException
      * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
      * @throws \RuntimeException
      */
@@ -161,6 +168,7 @@ class Wechat implements GatewayInterface
      *
      * @throws \InvalidArgumentException
      * @throws \Nilnice\Payment\Exception\GatewayException
+     * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
      * @throws \RuntimeException
      */
