@@ -164,7 +164,7 @@ final class Constant
     /**
      * 微信公众号支付 - 用户在微信内进入商家 H5 页面，页面内调用 JSSDK 完成支付
      */
-    public const WX_PAY_PUB_TYPE = 'NATIVE';
+    public const WX_PAY_PUB_TYPE = 'JSAPI';
 
     /**
      * 微信 APP 支付 - 商户 APP 中集成微信 SDK，用户点击后跳转到微信内完成支付

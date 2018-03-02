@@ -14,6 +14,7 @@ use Symfony\Component\HttpFoundation\Request;
  * @method Wechat\AppPayment app(array $array)
  * @method Wechat\WapPayment wap(array $array)
  * @method Wechat\ScanPayment scan(array $array)
+ * @method Wechat\PubPayment pub(array $array)
  */
 class Wechat implements GatewayInterface
 {
@@ -103,7 +104,6 @@ class Wechat implements GatewayInterface
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
-     * @throws \RuntimeException
      */
     public function query($order) : Collection
     {
@@ -129,7 +129,6 @@ class Wechat implements GatewayInterface
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
-     * @throws \RuntimeException
      */
     public function close($order) : Collection
     {
@@ -170,7 +169,6 @@ class Wechat implements GatewayInterface
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
-     * @throws \RuntimeException
      */
     public function refund($order) : Collection
     {

@@ -20,7 +20,6 @@ class TransferPayment extends AbstractWechat
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
-     * @throws \RuntimeException
      */
     public function toPay(string $gateway, array $payload) : Collection
     {

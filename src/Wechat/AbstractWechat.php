@@ -49,7 +49,6 @@ abstract class AbstractWechat implements PaymentInterface
      * @throws \InvalidArgumentException
      * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
-     * @throws \RuntimeException
      */
     protected function prepare(string $gateway, array $payload) : Collection
     {

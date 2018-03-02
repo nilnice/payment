@@ -26,9 +26,7 @@ trait RequestTrait
      *
      * @throws \Nilnice\Payment\Exception\GatewayException
      * @throws \InvalidArgumentException
-     * @throws \Nilnice\Payment\Exception\InvalidKeyException
      * @throws \Nilnice\Payment\Exception\InvalidSignException
-     * @throws \RuntimeException
      */
     public function send(
         string $gateway,
