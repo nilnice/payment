@@ -4,6 +4,7 @@ namespace Nilnice\Payment\Wechat;
 
 use Illuminate\Config\Repository;
 use Illuminate\Support\Collection;
+use Nilnice\Payment\Constant;
 use Nilnice\Payment\PaymentInterface;
 use Nilnice\Payment\Wechat\Traits\RequestTrait;
 use Nilnice\Payment\Wechat\Traits\SecurityTrait;
@@ -38,7 +39,7 @@ abstract class AbstractWechat implements PaymentInterface
     }
 
     /**
-     * Pregenerating order.
+     * Unified order.
      *
      * @param string $gateway
      * @param array  $payload
@@ -52,7 +53,11 @@ abstract class AbstractWechat implements PaymentInterface
      */
     protected function prepare(string $gateway, array $payload) : Collection
     {
-        $key = $this->config->get('key');
+        if ($payload['trade_type'] === Constant::WX_PAY_APP_TYPE) {
+            $key = $this->config->get('app_key');
+        } else {
+            $key = $this->config->get('key');
+        }
         $payload['sign'] = self::generateSign($payload, $key);
 
         return $this->send($gateway, $payload, $key);

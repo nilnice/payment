@@ -242,6 +242,7 @@ class Wechat implements GatewayInterface
         switch ($method) {
             case 'app': // APP 支付
                 $this->payload['appid'] = $this->config->get('app_appid');
+                $this->payload['mch_id'] = $this->config->get('app_mchid');
                 break;
             case 'wap': // H5 支付
             case 'bar': // 刷卡支付

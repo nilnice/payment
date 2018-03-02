@@ -26,8 +26,8 @@ class AppPayment extends AbstractWechat
     public function toPay(string $gateway, array $payload) : Response
     {
         $payload['trade_type'] = Constant::WX_PAY_APP_TYPE;
-        $object = $this->prepare(Constant::WX_PAY_PREPARE, $payload, 'app');
-        $key = $this->config->get('key');
+        $object = $this->prepare(Constant::WX_PAY_PREPARE, $payload);
+        $key = $this->config->get('app_key');
         $parameter = [
             'appid'     => $payload['appid'],
             'partnerid' => $payload['mch_id'],
